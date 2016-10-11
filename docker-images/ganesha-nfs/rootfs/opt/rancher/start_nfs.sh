@@ -49,18 +49,26 @@ bootstrap_config() {
 NFSV4 { Graceless = true; }
 EXPORT{
     Export_Id = 2;
-    Path = "${EXPORT_PATH}";
+    Path = "${EXPORT_1_PATH}";
     FSAL {
         name = VFS;
     }
     Access_type = RW;
     Disable_ACL = true;
-    Squash = "${SQUASH_MODE}";
-    Pseudo = "/${EXPORT_NAME}";
-    #Anonymous_uid = ${ANON_UID};
-    #Anonymous_gid = ${ANON_GID};
-    #Protocols = "NFS4";
-    #Transports = "TCP";
+    Pseudo = "/${EXPORT_1_NAME}";
+    Protocols = "NFS4";
+    SecType = "sys";
+}
+EXPORT{
+    Export_Id = 3;
+    Path = "${EXPORT_2_PATH}";
+    FSAL {
+        name = VFS;
+    }
+    Access_type = RW;
+    Disable_ACL = true;
+    Pseudo = "/${EXPORT_2_NAME}";
+    Protocols = "NFS4";
     SecType = "sys";
 }
 
@@ -70,19 +78,25 @@ END
 sleep 0.5
 
 ALLMETA=$(curl -sS -H 'Accept: application/json' ${META_URL})
-EXPORT_NAME=$(echo ${ALLMETA} | jq -r '.self.service.metadata.export_name')
-SQUASH_MODE=$(echo ${ALLMETA} | jq -r '.self.service.metadata.squash_mode')
-STORAGE_PATH="/data/nfs"
-EXPORT_PATH="${STORAGE_PATH}/${EXPORT_NAME}"
+EXPORT_1_NAME=$(echo ${ALLMETA} | jq -r '.self.service.metadata.export_1_name')
+EXPORT_2_NAME=$(echo ${ALLMETA} | jq -r '.self.service.metadata.export_2_name')
+EXPORT_BASE_PATH=$(echo ${ALLMETA} | jq -r '.self.service.metadata.export_base_path')
+EXPORT_1_PATH="${EXPORT_BASE_PATH}/${EXPORT_1_NAME}"
+EXPORT_2_PATH="${EXPORT_BASE_PATH}/${EXPORT_2_NAME}"
 
-if [ ! -f ${EXPORT_PATH} ]; then
-    mkdir -p "${EXPORT_PATH}"
+if [ ! -f ${EXPORT_1_PATH} ]; then
+    mkdir -p "${EXPORT_1_PATH}"
+fi
+if [ ! -f ${EXPORT_2_PATH} ]; then
+    mkdir -p "${EXPORT_2_PATH}"
 fi
 
 echo "initializing Ganesha NFS server"
 echo "=================================="
-echo "export name: ${EXPORT_NAME}"
-echo "export path: ${EXPORT_PATH}"
+echo "export 1 name: ${EXPORT_1_NAME}"
+echo "export 1 path: ${EXPORT_1_PATH}"
+echo "export 2 name: ${EXPORT_2_NAME}"
+echo "export 2 path: ${EXPORT_2_PATH}"
 echo "=================================="
 
 bootstrap_config

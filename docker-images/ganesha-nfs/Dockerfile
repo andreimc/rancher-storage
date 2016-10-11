@@ -15,22 +15,6 @@ RUN yum install -y epel-release.noarch centos-release-gluster37.noarch && \
     # Clean cache
     yum -y clean all
 
-# Add Giddyup
-ENV GIDDYUP_VERSION v0.14.0
-ADD https://github.com/cloudnautique/giddyup/releases/download/${GIDDYUP_VERSION}/giddyup /usr/local/bin/giddyup
-RUN chmod +x /usr/local/bin/giddyup
-
-# Add Tini
-ENV TINI_VERSION v0.10.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini.asc /tini.asc
-RUN set -x \
-    && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-    && gpg --verify /tini.asc \
-    && rm -rf "$GNUPGHOME" /tini.asc \
-    && chmod +x /tini
-
 COPY rootfs /
 
 VOLUME ["/data/nfs"]
