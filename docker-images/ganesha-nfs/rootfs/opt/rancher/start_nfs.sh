@@ -56,6 +56,7 @@ EXPORT{
     Access_type = RW;
     Disable_ACL = true;
     Pseudo = "/${EXPORT_1_NAME}";
+    Squash = "No_Root_Squash";
     Protocols = "NFS4";
     SecType = "sys";
 }
@@ -68,6 +69,7 @@ EXPORT{
     Access_type = RW;
     Disable_ACL = true;
     Pseudo = "/${EXPORT_2_NAME}";
+    Squash = "No_Root_Squash";
     Protocols = "NFS4";
     SecType = "sys";
 }
