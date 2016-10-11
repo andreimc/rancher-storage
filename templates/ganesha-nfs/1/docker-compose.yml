@@ -6,4 +6,4 @@ ganesha-nfs:
     io.rancher.container.hostname_override: container_name
     io.rancher.container.pull_image: always
   volumes:
-    - ${HOST_MOUNT}/data/nfs
+    - ${HOST_MOUNT}${EXPORT_BASE_PATH}
