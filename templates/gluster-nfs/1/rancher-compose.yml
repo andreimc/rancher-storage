@@ -20,7 +20,7 @@
         - "2"
         - "3"
     - variable: "HOST_LABEL_RULE"
-      label: "Host Scheduling (Not Implemented)"
+      label: "Host Scheduling"
       description: |
         To start the gluster nodes on specific hosts, enter a host label rule in the format <label>=<value>,
         e.g. "storage=true". Make sure that the number of hosts with matching label is equal or more the number of replicas.
